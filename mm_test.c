@@ -92,7 +92,7 @@ int main (int argc, char** argv) {
       for (int i=0; i<nwords;i++){
 	matrixC[i + ci*n] = atoi(words[i]);
       }
-      ci+=1;
+      ci+=1;  
     }
     ctr += 1;
   }

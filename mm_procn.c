@@ -32,7 +32,7 @@ void mm ( size_t N, NUMTYPE * A, NUMTYPE * B, NUMTYPE * C) {
   int i = 0; 
   int slice;
   int leftover = N % NUM_PROCESSES;
-  if (leftover  == 0) { //account for when N cannot be perfectly divided by NUM_PROCESSES
+  if (leftover  == 0) { 
     slice = N/NUM_PROCESSES;
     while (i < NUM_PROCESSES){
       int child_pid = fork();
@@ -45,7 +45,7 @@ void mm ( size_t N, NUMTYPE * A, NUMTYPE * B, NUMTYPE * C) {
     while(wait(NULL)>0);
     memcpy(C, T, sizeof(NUMTYPE) * N * N);
     munmap(T, N * N * sizeof (NUMTYPE));
-  } else {
+  } else {//account for when N cannot be perfectly divided by NUM_PROCESSES
     slice = (N-leftover)/NUM_PROCESSES;
     while (i< NUM_PROCESSES ){
       int child_pid = fork();

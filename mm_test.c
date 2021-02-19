@@ -96,6 +96,9 @@ int main (int argc, char** argv) {
     }
     ctr += 1;
   }
+
+  /* time this */
+
   mm(n, matrixA, matrixB, matrixD);
 
 

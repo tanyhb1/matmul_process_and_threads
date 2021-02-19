@@ -10,9 +10,8 @@ mm_openmp : mm_openmp.c mm_test.c mm_test.h
 		${CC} $@.c  mm_test.c -o $@ -I . ${CFLAGS} -fopenmp
 
 mm_threadsn : mm_threadsn.c mm_test.c mm_test.h
-		${CC} mm_threadsn.c mm_test.c -o mm_threadsn -I . ${CFLAGS} -lpthread
-mm_threadsn2: mm_threadsn2.c mm_test.c mm_test.h
-		${CC} mm_threadsn2.c mm_test.c -o mm_threadsn2 -I . ${CFLAGS} -lpthread
+		${CC} $@.c mm_test.c -o $@ -I . ${CFLAGS} -lpthread
+
 mm_% : mm_%.c mm_test.c mm_test.h
 	${CC} mm_$*.c mm_test.c -o $@ -I . ${CFLAGS}
 

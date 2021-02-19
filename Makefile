@@ -6,6 +6,9 @@ EXEC_TEST_NAMES := $(addprefix test_, $(basename ${SRCS} ))
 TESTS := test2 test32 test500
 all : $(PROGS)
 
+mm_openmp : mm_openmp.c mm_test.c mm_test.h
+		${CC} $@.c  mm_test.c -o $@ -I . ${CFLAGS} -fopenmp
+
 mm_threadsn : mm_threadsn.c mm_test.c mm_test.h
 		${CC} mm_threadsn.c mm_test.c -o mm_threadsn -I . ${CFLAGS} -lpthread
 mm_threadsn2: mm_threadsn2.c mm_test.c mm_test.h

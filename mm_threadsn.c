@@ -65,7 +65,7 @@ void mm_seq (size_t start, size_t end, size_t N, NUMTYPE * A, NUMTYPE * B, NUMTY
 
 
 void mm (size_t N, NUMTYPE * A, NUMTYPE * B , NUMTYPE * C) {
-
+  pthread_mutex_init(&lock, NULL);
   int rc;
   pthread_t * thread = malloc(sizeof(pthread_t)*(NUM_THREADS+1));
   struct arg_mm args;

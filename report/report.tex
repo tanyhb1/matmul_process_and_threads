@@ -175,7 +175,7 @@ See: \texttt{mm\_openmp.c}
 Essentially, \texttt{\#pragma omp parallel for} starts a team of threads (whose number is determined at runtime) to delegate portion of the \texttt{for}-loop to. \texttt{shared(A,B,C)} just informs OpenMP what memory is able to be shared, and \texttt{private(x,y,d)} says what is private.
 
 \section{Evaluation}
-To generate the plots for this section, just run \texttt{make graphs} from the \texttt{matmul\_process\_and\_threads} directory. The requirements are that you have \texttt{python3} and \texttt{matplotlib} library for \texttt{python} installed (works for python 2 as well I think but I worked in python 3).
+To generate the plots for this section, just run \texttt{make graphs} from the \texttt{matmul\_process\_and\_threads} directory. Please pardon my amateur-ish attempt at automating it using the Makefile and python scripting. The requirements are that you have \texttt{python3} and \texttt{matplotlib} library for \texttt{python} installed (works for python 2 as well I think but I worked in python 3).
 
 \begin{figure}[!h]
 \centering  \includegraphics[width=0.5\textwidth]{others}

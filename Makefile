@@ -9,7 +9,9 @@ all : $(PROGS)
 graphs : mm_openmp.c mm_seq.c mm_proc.c mm_procn.c mm_threadsn.c mm_test.c mm_test.h main.py plot.py
 	echo "mm_threadsn" | python3 main.py
 	echo "mm_procn" | python3 main.py
-	echo "others" | python3 main.py
+	echo "mm_openmp" | python3 main.py
+	echo "all real time" | python3 main.py
+
 
 mm_openmp : mm_openmp.c mm_test.c mm_test.h
 		${CC} $@.c  mm_test.c -o $@ -I . ${CFLAGS} -fopenmp

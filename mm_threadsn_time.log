@@ -1,33 +1,29 @@
 mm_threadsn
 
-real	0m0.207s
-user	0m0.199s
+real	0m0.197s
+user	0m0.189s
 sys	0m0.008s
 
-real	0m0.140s
-user	0m0.206s
-sys	0m0.000s
+real	0m0.141s
+user	0m0.196s
+sys	0m0.012s
 
-real	0m0.104s
-user	0m0.192s
-sys	0m0.008s
+real	0m0.109s
+user	0m0.209s
+sys	0m0.004s
 
-real	0m0.119s
-user	0m0.342s
-sys	0m0.008s
-
-real	0m0.106s
-user	0m0.345s
+real	0m0.112s
+user	0m0.354s
 sys	0m0.008s
 
 real	0m0.112s
-user	0m0.328s
-sys	0m0.031s
+user	0m0.353s
+sys	0m0.000s
 
-real	0m0.183s
-user	0m0.175s
-sys	0m0.008s
-
-real	0m0.110s
-user	0m0.448s
+real	0m0.117s
+user	0m0.359s
 sys	0m0.004s
+
+real	0m0.197s
+user	0m0.189s
+sys	0m0.008s

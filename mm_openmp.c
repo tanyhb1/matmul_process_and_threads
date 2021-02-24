@@ -14,8 +14,7 @@
 
 void mm (size_t N, NUMTYPE * A, NUMTYPE * B, NUMTYPE * C) {
   unsigned int x,y,d;
-#pragma omp parallel for shared(A,B,C) private(x,y,d)
-
+  #pragma omp parallel for
   for ( x = 0 ; x < N ; x++) {
     for ( y = 0 ; y < N ; y++) {
       unsigned int tidx = x + y * N ;

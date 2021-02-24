@@ -6,8 +6,25 @@ import matplotlib.pyplot as plt
 
 no_of_threads = ["1","2","4","8","16","32"]
 
+def plot2(arr):
+    for mm in arr:
+        name = mm[0]
+        curr = mm[1:]
+        x = [int(t) for t in no_of_threads]
+        y_real = [float(x[1].split("m")[1].strip("s")) for x in curr]
+        if name == "mm_seq":
+            y_real = [float(curr[0][1].split("m")[1].strip("s")) for _ in range(6)]
+        real = plt.plot(x,y_real, marker='o', label="real time for " + name)
+    plt.xlim(0,35)
+    plt.xticks([int(x) for x in no_of_threads])
+    plt.xlabel("Number of threads")
+    plt.title("Plot for real time taken by all four matrix multiplication methods")
+    plt.ylabel("Run time in seconds")
+    plt.legend(loc="upper left")
+    plt.savefig("realtimes.png", bbox_inches='tight')
+    plt.show()
 def plot(res, curr_mm_name):
-    if curr_mm_name == "mm_threadsn" or curr_mm_name == "mm_procn":
+    if curr_mm_name == "mm_threadsn" or curr_mm_name == "mm_procn" or curr_mm_name == "mm_openmp":
         curr = res[:6]
         other_mms = res[6:]
 
@@ -22,7 +39,7 @@ def plot(res, curr_mm_name):
         
         plt.xlim(0,35)
         plt.xticks([int(x) for x in no_of_threads])
-        if curr_mm_name == "mm_threadsn":
+        if curr_mm_name == "mm_threadsn" or curr_mm_name == "mm_openmp":
             plt.xlabel("Number of threads")
             plt.title("Plot for n-threading")
         else:
@@ -30,12 +47,9 @@ def plot(res, curr_mm_name):
             plt.title("Plot for n-processes")
         plt.ylabel("Run time in seconds")            
 
-        print(other_mms[1])
         y_seq = [float(other_mms[0][0][1].split("m")[1].strip("s")) for _ in range(6)]
-        y_openmp = [float(other_mms[1][0][1].split("m")[1].strip("s")) for _ in range(6)]
 
         seq = plt.plot(x,y_seq, marker='o',linestyle='dashed', label="seq real time")
-        openmp = plt.plot(x,y_openmp, marker='o',linestyle='dashed', label="openmp real time")
         plt.legend(loc="upper left")
         plt.savefig(curr_mm_name+".png", bbox_inches='tight')
         plt.show()
@@ -67,21 +81,40 @@ def main():
     i = 0
     tmp = []
     curr_mm_name = ""
+    handle_real = False 
     for line in sys.stdin :
         payload = line.strip("\n").split("\t")
-        if "mm" in line or "others" in line:
-            curr_mm_name = payload[0]
-        elif len(payload) > 1:
-            if i < 2:
-                tmp.append(payload)
-                i += 1
-            else:
-                tmp.append(payload)
+        if "other" in line:
+            handle_real = False
+        if "real time" in line:
+            handle_real = True
+        if not handle_real:
+            if "mm" in line or "others" in line:
+                curr_mm_name = payload[0]
+            elif len(payload) > 1:
+                if i < 2:
+                    tmp.append(payload)
+                    i += 1
+                else:
+                    tmp.append(payload)
+                    res.append(tmp)
+                    tmp = []
+                    i = 0
+        else:
+            if "mm" in line:
                 res.append(tmp)
                 tmp = []
-                i = 0
+                curr_mm_name = payload[0]
+                tmp.append(curr_mm_name)
+            else:
+                if len(payload) > 1 and payload[0] == "real":
+                    tmp.append(payload)
+    if not handle_real:
+        plot(res, curr_mm_name)
+    else:
+        res.append(tmp)
+        plot2(res[1:])
 
-    plot(res, curr_mm_name)
 
 if __name__ == "__main__":
     main()

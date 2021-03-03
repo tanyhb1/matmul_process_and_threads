@@ -20,7 +20,7 @@
 \graphicspath{ {./images/} }
 
 \usepackage[usenames, dvipsnames]{xcolor}
-v\definecolor{dkgray}{rgb}{.4,.4,.4}
+\definecolor{dkgray}{rgb}{.4,.4,.4}
 \definecolor{dkred}{rgb}{.4,0,0}
 \definecolor{dkgreen}{rgb}{0,.4,0}
 \definecolor{dkblue}{rgb}{0,0,.4}
@@ -62,7 +62,7 @@ v\definecolor{dkgray}{rgb}{.4,.4,.4}
 
 \begin{document}
 \section{Introduction}
-In this report, I document my findings with exploring four more versions of the \texttt{matmul} program: one with $2$ processes, one with $N $ processes, one with $N$ threads, and one using OpenMP. I describe my implementation for each of them before finally showing some plots that compare their runtime across the number of cores used. The code and artefacts are available in the associated folder.
+In this report, I document my findings with exploring four more versions of the \texttt{matmul} program: one with $2$ processes, one with $N $ processes, one with $N$ threads, and one using OpenMP across $N$ threads. I describe my implementation for each of them before finally showing some plots that compare their runtime across the number of cores used. The code and artefacts are available in the associated folder, with the \texttt{.tex} file of this report available in the ``report'' folder.
 \section{Implementation}
 \subsection{2 Processes \texttt{matmul}}
 Firstly, we improve upon the naive sequential implementation of \texttt{matmul}. Matrix multiplication as implemented in \texttt{mm\_seq} is inherently parallelizable since accessing the two matrices to perform the multiplication does not change the matrices, so there won't be a race condition. Thus, we can divide the work in half by invoking a new process and having it do one-half of the total multiplications. The only difficulty is handling shared memory - we first construct a ``shared'' matrix to store the result in. Then, when we are done, we copy the matrix into our result matrix $C$, taking care to unmap the memory allocated to the ``shared'' matrix.
@@ -174,19 +174,25 @@ See: \texttt{mm\_openmp.c}
 
 Essentially, \texttt{\#pragma omp parallel for} starts a team of threads (whose number is determined at runtime) to delegate portion of the \texttt{for}-loop to. \texttt{shared(A,B,C)} just informs OpenMP what memory is able to be shared, and \texttt{private(x,y,d)} says what is private.
 
+To determine the number of threads that \texttt{OpenMP} has access to, we add a flag \texttt{OMP\_NUM\_THREADS=x} where $x$ is the number of threads desired before executing the program.
+
 \section{Evaluation}
 To generate the plots for this section, just run \texttt{make graphs} from the \texttt{matmul\_process\_and\_threads} directory. Please pardon my amateur-ish attempt at automating it using the Makefile and python scripting. The requirements are that you have \texttt{python3} and \texttt{matplotlib} library for \texttt{python} installed (works for python 2 as well I think but I worked in python 3).
 
-\begin{figure}[!h]
-\centering  \includegraphics[width=0.5\textwidth]{others}
+\begin{figure}[h]
+  \begin{subfigure}[t]{.5\textwidth}
+\centering  \includegraphics[width=\textwidth]{others}
 \label{fig: mm_seq and mm_openmp}
 \caption{Run time for mm\_seq and mm\_openmp}
-\end{figure}
 
-In figure 1, we simply have a horizontal line for the runtime since sequential matrix multiplication is, well, sequential, and because OpenMP determines at runtime the optimal number of cores, so it is fixed. We see that the OpenMP implementation is significantly faster than the naive sequential one in terms of real time (blue line v.s. red line). However, since OpenMP uses significant multithreading, the user time for OpenMP matrix multiplication (purple line) is very high which signifies the usage of multiple cores and threads.
-
-  \begin{figure}[!h]
-  \begin{subfigure}[t]{.5\textwidth}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.55\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{mm_openmp.png}
+    \caption{Run time for mm\_openmp}
+  \end{subfigure}
+    \begin{subfigure}[t]{.5\textwidth}
     \centering    \includegraphics[width=\linewidth]{mm_procn.png}
     \caption {Run time for mm\_procn}
     %\label{fig:draketl}
@@ -198,10 +204,25 @@ In figure 1, we simply have a horizontal line for the runtime since sequential m
     \caption{Run time for mm\_threadsn}
         %\label{fig:draketr}
   \end{subfigure}
+
 \end{figure}
 
-For \texttt{mm\_procn} and \texttt{mm\_threadsn}, we compare their real, user, and sys times as well. We also overlay the previous sequential and OpenMP real runtimes just for easier comparison. Looking at figures (a) and (b), we see that for both implementations, the real run time (blue line) decreases as more threads are being used (tested on 1,2,4,8,16,32 threads). As one expects, as the number of threads increases, and the real run time decreases, the user time (orange line) increases as the total CPU time is increased since we utilize more of it. We see that the improvements to real runtime stabilizes after around 16 threads, which is probably the upper limit of actual hardware threads available, and after that the threads are just software threads being spawned that don't improve the runtime. We see that both \texttt{mm\_threadsn} and \texttt{mm\_procn} perform comparably to \texttt{OpenMP} after 8 threads, which is wonderful because it means my implementation was almost as efficient.
+In figure (a), we simply have a horizontal line for the runtime since sequential matrix multiplication is, well, sequential, and because OpenMP determines at runtime the optimal number of cores, so it is fixed. We see that the OpenMP implementation is significantly faster than the naive sequential one in terms of real time (blue line v.s. red line). However, since OpenMP uses significant multithreading, the user time for OpenMP matrix multiplication (purple line) is very high which signifies the usage of multiple cores and threads.
 
+
+
+For \texttt{mm\_procn} and \texttt{mm\_threadsn}, we compare their real, user, and sys times as well. Furthermore, since we can also change the number of threads that \texttt{OpenMP} uses, we also attach the results of that change here. They are represented by figures (b),(c), and (d) respectively. We also overlay the previous sequential real runtimes just for easier comparison. Looking at figures (b),(c), and (d), we see that for all three implementations, the real run time (blue line) decreases as more threads are being used (tested on 1,2,4,8,16,32 threads). As one expects, as the number of threads increases, and the real run time decreases, the user time (orange line) increases as the total CPU time is increased since we utilize more of it. We see that the improvements to real runtime stabilizes after around 16 threads, which is probably the upper limit of actual hardware threads available in my computer, and after that the threads are just software threads being spawned that don't improve the runtime. We see that both \texttt{mm\_threadsn} and \texttt{mm\_procn} perform comparably to \texttt{OpenMP} after 8 threads, which is wonderful because it means my implementation was almost as efficient.
+
+Finally, we compare the real runtime of all four matrix multiplication implementations:\\
+\begin{centering}
+     \includegraphics[width=0.5\linewidth]{allrealtime.png}
+\end{centering}
+
+And we can conclude that \texttt{mm\_openmp} appears to perform tangentially better than the other two multi-threaded/core implementations, probably because they have other optimizations put in place whereas our implementations of $n$-threading or processes were just naive implementations.
+
+\section{Concluding remarks}
+
+In conclusion, in this report we have explored four different implementations of matrix multiplication: sequential, with $n$-threads, with $n$-processes, and with the OpenMP framework. In the evaluations of the implementation, we see that the OpenMP implementation performs slightly better than ours, probably because of some micro-optimizations that they perform like accounting for cache-misses or doing loop-unrolling. Nevertheless, it demonstrates that even a naive implementation of concurrency/parallelism can speed up the efficiency of a program by a large factor.
 \end{document}
 
 %%% Local Variables:

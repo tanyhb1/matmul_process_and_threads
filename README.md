@@ -1,23 +1,19 @@
-# matmul
+# Matmul Process and Threads
 
 Matrix Multiplication Benchmarks
 
-## Task 1
+## Report
 
-  Write a mm_test.c program that do in order:
-    - takes as an argument one of the test file,
-    - Read the file from which it loads 3 matrices A,B and C
-    - run mm(A,B,D) and make sure C == D
-    - the ouput is formated the same as in test file,
-      except that it is not N,A,B,C but N,A,B,D.   
+The report is available in the main directory as "report.pdf". The source code for the report is available in the "report" folder.
 
+## Graphs for benchmarks
 
-## Task 2
+You can generate the graphs for the benchmarks that are in the report by typing
 
-   Edit the Makefile in order to run the tests.
-   When we type make test, we expect to compile and run a tester for every single implementation of mm (mm_seq, mm_proc, mm_gol, etc...).
+```
+make graphs
+```
 
+This will generate the individual graphs for each matrix multiplication method, as well as a combined graph for the real time taken for all the methods.
 
-## Task 3
-
-   Edit the Makefile so that when we type `make mmf_seq` instead of `make mm_seq`, then a floating point version of the matrix multiplication is compiled using the `-DDOUBLE_MM` preprocessing parameter.
+More information is available in the `Makefile` and the report. The graphs are generated using python libraries in `main.py` and `plot.py`.

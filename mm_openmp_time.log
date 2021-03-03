@@ -1,29 +1,29 @@
 mm_openmp
 
-real	0m0.191s
-user	0m0.175s
-sys	0m0.016s
-
-real	0m0.138s
-user	0m0.198s
-sys	0m0.016s
-
-real	0m0.110s
-user	0m0.252s
+real	0m0.201s
+user	0m0.189s
 sys	0m0.012s
 
-real	0m0.117s
-user	0m0.466s
+real	0m0.147s
+user	0m0.225s
+sys	0m0.008s
+
+real	0m0.107s
+user	0m0.231s
 sys	0m0.012s
+
+real	0m0.180s
+user	0m0.641s
+sys	0m0.024s
 
 real	0m0.113s
-user	0m0.315s
-sys	0m0.029s
+user	0m0.329s
+sys	0m0.016s
 
-real	0m0.110s
-user	0m0.340s
-sys	0m0.017s
+real	0m0.113s
+user	0m0.336s
+sys	0m0.016s
 
-real	0m0.199s
-user	0m0.195s
-sys	0m0.004s
+real	0m0.194s
+user	0m0.182s
+sys	0m0.012s

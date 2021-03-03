@@ -39,9 +39,12 @@ def plot(res, curr_mm_name):
         
         plt.xlim(0,35)
         plt.xticks([int(x) for x in no_of_threads])
-        if curr_mm_name == "mm_threadsn" or curr_mm_name == "mm_openmp":
+        if curr_mm_name == "mm_threadsn":
             plt.xlabel("Number of threads")
             plt.title("Plot for n-threading")
+        elif curr_mm_name == "mm_openmp":
+            plt.xlabel("Number of threads")
+            plt.title("Plot for n-threading using OpenMP")
         else:
             plt.xlabel("Number of processes")
             plt.title("Plot for n-processes")
